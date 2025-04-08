@@ -7,6 +7,8 @@ import (
 	"github.com/go-chi/chi/v5"
 	"github.com/go-chi/chi/v5/middleware"
 
+	"go-portfolio-tracker/internal/domain"
+	"go-portfolio-tracker/internal/infrastructure/db"
 	"go-portfolio-tracker/internal/infrastructure/repository"
 	"go-portfolio-tracker/internal/interface/controller"
 	"go-portfolio-tracker/internal/usecase/command"
@@ -14,7 +16,12 @@ import (
 )
 
 func main() {
-	repo := &repository.AssetRepositoryMock{}
+
+	gormDb := db.NewGormSQLServer()
+	repo := repository.NewAssetRepositoryGorm(gormDb)
+
+	// Auto migrate schema
+	gormDb.AutoMigrate(&domain.Asset{})
 
 	// Use cases
 	getAllAssetsQuery := query.NewGetAllAssetsQuery(repo)
