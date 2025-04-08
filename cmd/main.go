@@ -9,6 +9,7 @@ import (
 
 	"go-portfolio-tracker/internal/infrastructure/repository"
 	"go-portfolio-tracker/internal/interface/controller"
+	"go-portfolio-tracker/internal/usecase/command"
 	"go-portfolio-tracker/internal/usecase/query"
 )
 
@@ -16,17 +17,19 @@ func main() {
 	repo := &repository.AssetRepositoryMock{}
 
 	// Use cases
-	getAllAssets := query.NewGetAllAssetsQuery(repo)
+	getAllAssetsQuery := query.NewGetAllAssetsQuery(repo)
+	createNewAssetCommand := command.NewCreateNewAssetCommand(repo)
 
 	// HTTP Controller
-	handler := controller.NewAssetController(getAllAssets)
+	handler := controller.NewAssetController(getAllAssetsQuery, createNewAssetCommand)
 
 	// Router setup
 	r := chi.NewRouter()
 	r.Use(middleware.Logger)
 
 	// Routes
-	r.Get("/assets", handler.GetAllAssets)
+	r.Get("/api/assets", handler.GetAllAssets)
+	r.Post("/api/assets", handler.CreateNewAsset)
 
 	// Start server
 	log.Println("Server running on :8080")
