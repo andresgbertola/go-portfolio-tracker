@@ -21,13 +21,13 @@ func NewGormSQLServer() *gorm.DB {
 
 	masterDB, err := gorm.Open(sqlserver.Open(masterDSN), &gorm.Config{})
 	if err != nil {
-		log.Fatalf("❌ Could not connect to SQL Server master DB: %v", err)
+		log.Fatalf("Could not connect to SQL Server master DB: %v", err)
 	}
 
 	// Ensure target database exists
 	createDBSQL := fmt.Sprintf("IF DB_ID('%s') IS NULL CREATE DATABASE [%s];", database, database)
 	if err := masterDB.Exec(createDBSQL).Error; err != nil {
-		log.Fatalf("❌ Could not create database %s: %v", database, err)
+		log.Fatalf("Could not create database %s: %v", database, err)
 	}
 
 	// Connect to the target database
@@ -35,9 +35,9 @@ func NewGormSQLServer() *gorm.DB {
 
 	db, err := gorm.Open(sqlserver.Open(targetDSN), &gorm.Config{})
 	if err != nil {
-		log.Fatalf("❌ Could not connect to database %s: %v", database, err)
+		log.Fatalf("Could not connect to database %s: %v", database, err)
 	}
 
-	log.Println("✅ Connected to SQL Server:", database)
+	log.Println("Connected to SQL Server:", database)
 	return db
 }
