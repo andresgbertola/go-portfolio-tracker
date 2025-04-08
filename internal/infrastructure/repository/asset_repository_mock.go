@@ -17,7 +17,7 @@ func (a *AssetRepositoryMock) GetAllAssets() ([]domain.Asset, error) {
 			AssetName:          "BTC",
 			Quantity:           1,
 			ExchangedQuantity:  90000.0,
-			ExchangedAssetName: "Ethereum",
+			ExchangedAssetName: "USD",
 			UnitExchangeValue:  90000.0,
 			EntryDate:          time.Now(),
 		},
